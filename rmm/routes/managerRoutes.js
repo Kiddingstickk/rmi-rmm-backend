@@ -19,7 +19,7 @@ router.get('/search/:query', async (req, res) => {
   
       const regex = new RegExp(query, 'i'); // case-insensitive
       const filter = searchMode === 'company'
-        ? { company: regex }
+        ? { branch: regex }
         : { name: regex };
   
       const managers = await Manager.find(filter).limit(10);
