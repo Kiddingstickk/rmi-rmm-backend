@@ -11,4 +11,25 @@ router.put('/:id', updateManager);
 router.delete('/:id', deleteManager);  
 
 
+
+router.get('/search/:query', async (req, res) => {
+    try {
+      const { query } = req.params;
+      const { searchMode } = req.query;
+  
+      const regex = new RegExp(query, 'i'); // case-insensitive
+      const filter = searchMode === 'company'
+        ? { company: regex }
+        : { name: regex };
+  
+      const managers = await Manager.find(filter).limit(10);
+      res.status(200).json(managers);
+    } catch (err) {
+      console.error('Error searching managers:', err);
+      res.status(500).json({ error: 'Server error while searching managers' });
+    }
+  });
+
+
+
 export default router;
