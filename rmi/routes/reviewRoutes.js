@@ -24,6 +24,10 @@ router.get('/my-reviews', auth , async (req, res) => {
 // POST - Submit a new review for an interviewer
 router.post('/', auth, async (req, res) => {
   try {
+    console.log('REQ.BODY:', req.body);
+    console.log('REQ.USER:', req.user);
+
+
     const { interviewerId, rating, reviewText, interviewStatus, anonymous } = req.body;
 
     if (!interviewerId || !rating || !reviewText) {
