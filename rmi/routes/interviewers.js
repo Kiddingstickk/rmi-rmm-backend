@@ -155,6 +155,11 @@ router.post('/:id/rating', auth , async (req, res) => {
 router.post('/', async (req, res) => {
   const { name, company, position, rating, experience } = req.body;
 
+  if (!name || !company) {
+    return res.status(400).json({ message: 'Name and company are required.' });
+  }
+
+
   const newInterviewer = new Interviewer({
     name,
     company,
