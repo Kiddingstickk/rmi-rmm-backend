@@ -187,6 +187,11 @@ router.post('/', async (req, res) => {
 
   try {
     const savedInterviewer = await newInterviewer.save();
+    await Company.findByIdAndUpdate(company, {
+      $addToSet: { interviewers: savedInterviewer._id }
+    });
+
+
     res.status(201).json(savedInterviewer); // Return the saved interviewer
   } catch (err) {
     res.status(400).json({ message: 'Failed to create interviewer', error: err.message });
