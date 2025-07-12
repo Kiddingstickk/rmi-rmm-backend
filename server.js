@@ -19,7 +19,7 @@ import departmentRoutes from './rmm/routes/departmentRoutes.js';
 import searchRoutes from './rmm/routes/searchRoutes.js';
 import managerReviewRoutes from './rmm/routes/managerReviewRoutes.js';
 import connectDB from './shared/config/db.js';
-import companyRoutes from './routes/companyRoutes.js';
+import companyRoutes from './rmm/routes/companyRoutes.js';
 
 
 
