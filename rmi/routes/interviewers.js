@@ -6,7 +6,7 @@ import User from '../models/user.js';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import auth from '../../shared/middleware/auth.js';
-import Company from '../models/company.js';
+import Company from '../../rmm/models/Company.js';
 
 
 
