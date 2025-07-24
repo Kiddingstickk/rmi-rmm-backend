@@ -14,7 +14,9 @@ export const getAllManagers = async (req, res) => {
       query.name = { $regex: regex };
     }
 
-    const managers = await Manager.find(query).populate('department');
+    const managers = await Manager.find(query)
+  .populate('department')
+  .populate('company', 'name'); // Only populate the name field
     res.json(managers);
   } catch (err) {
     console.error('Error fetching managers:', err);
