@@ -4,7 +4,7 @@ import Company from '../models/Company.js';
 
 
 // Get all managers
-import Manager from '../models/Manager.js'; // adjust path as needed
+
 
 export const getAllManagers = async (req, res) => {
   try {
