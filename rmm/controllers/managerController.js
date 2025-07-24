@@ -4,26 +4,32 @@ import Company from '../models/Company.js';
 
 
 // Get all managers
+import Manager from '../models/Manager.js'; // adjust path as needed
+
 export const getAllManagers = async (req, res) => {
   try {
     const { search } = req.query;
 
+    // Build search query
     let query = {};
     if (search && search.trim() !== '') {
       const regex = new RegExp(search.trim(), 'i'); // case-insensitive match
       query.name = { $regex: regex };
     }
 
+    // Fetch managers with populated fields
     const managers = await Manager.find(query)
-  .populate('department')
-  .populate('company', 'name'); // Only populate the name field
-    res.json(managers);
+      .populate('department') // optional: include department details
+      .populate('company', 'name') // ✅ include only company name
+      .lean(); // optional: improves performance
+
+    // Send response
+    res.json({ managers }); // ✅ wrap in object for consistency
   } catch (err) {
     console.error('Error fetching managers:', err);
     res.status(500).json({ error: 'Server error' });
   }
 };
-
 
 // Get a manager by ID
 export const getManagerById = async (req, res) => {
