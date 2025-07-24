@@ -5,26 +5,32 @@ import Company from '../models/Company.js';
 
 // Get all managers
 
-
 export const getAllManagers = async (req, res) => {
   try {
-    const { search } = req.query;
+    const { q } = req.query;
 
-    // Build search query
     let query = {};
-    if (search && search.trim() !== '') {
-      const regex = new RegExp(search.trim(), 'i'); // case-insensitive match
+    if (q && q.trim() !== '') {
+      const regex = new RegExp(q.trim(), 'i');
       query.name = { $regex: regex };
     }
 
-    // Fetch managers with populated fields
     const managers = await Manager.find(query)
-      .populate('department') // optional: include department details
-      .populate('company', 'name') // ✅ include only company name
-      .lean(); // optional: improves performance
+      .populate({
+        path: 'company',
+        select: 'name',
+        options: { strictPopulate: false } // ✅ prevents errors if company is missing
+      })
+      .populate('department', 'name')
+      .lean();
 
-    // Send response
-    res.json({ managers }); // ✅ wrap in object for consistency
+    // Optional: Normalize response to ensure company is either object or undefined
+    const normalized = managers.map(manager => ({
+      ...manager,
+      company: manager.company?.name ? { name: manager.company.name } : undefined
+    }));
+
+    res.json({ managers: normalized });
   } catch (err) {
     console.error('Error fetching managers:', err);
     res.status(500).json({ error: 'Server error' });
