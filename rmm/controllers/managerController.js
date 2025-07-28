@@ -14,6 +14,7 @@ export const getAllManagers = async (req, res) => {
       const regex = new RegExp(q.trim(), 'i');
       query.name = { $regex: regex };
     }
+    console.log('🔍 Query:', query);
 
     const managers = await Manager.find(query)
       .populate({
@@ -23,12 +24,16 @@ export const getAllManagers = async (req, res) => {
       })
       .populate('department', 'name')
       .lean();
+      console.log('📦 Raw managers after populate:', JSON.stringify(managers, null, 2));
 
     // Optional: Normalize response to ensure company is either object or undefined
     const normalized = managers.map(manager => ({
       ...manager,
-      company: manager.company?.name ? { name: manager.company.name } : undefined
+      company: manager.company?.name
+        ? { _id: manager.company._id, name: manager.company.name }
+        : undefined
     }));
+    console.log('✅ Normalized managers:', JSON.stringify(normalized, null, 2));
 
     res.json({ managers: normalized });
   } catch (err) {
