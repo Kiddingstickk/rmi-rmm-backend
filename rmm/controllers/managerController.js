@@ -53,15 +53,17 @@ export const getManagerById = async (req, res) => {
     const manager = await Manager.findById(req.params.id)
     .populate('company', 'name')
     .populate('department', 'name')
-   
+    .lean();
+
+
 
 
     if (!manager) return res.status(404).json({ message: 'Manager not found' });
     const reviews = await ManagerReview.find({ managerId: req.params.id })
-    .select('rating comment createdAt')
+    .select('rating reviewText leadership communication teamwork empathy fairness createdAt')
     .sort({ createdAt: -1 })
     .lean();
-    res.json({ ...manager, reviews });
+    res.json({ manager, reviews });
   } catch (err) {
     console.error('Error fetching manager with reviews:', err);
     res.status(500).json({ error: 'Server error' });
