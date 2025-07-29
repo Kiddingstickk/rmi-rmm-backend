@@ -1,6 +1,9 @@
 import Manager from '../models/Manager.js';
 import Department from '../models/Department.js';
 import Company from '../models/Company.js';
+import ManagerReview from '../models/ManagerReview.js';
+
+
 
 
 // Get all managers
@@ -50,18 +53,20 @@ export const getManagerById = async (req, res) => {
     const manager = await Manager.findById(req.params.id)
     .populate('company', 'name')
     .populate('department', 'name')
-    .populate({
-      path: 'reviews',
-      select: 'rating comment createdAt' // Only show safe fields
-    });
-
+   
 
 
     if (!manager) return res.status(404).json({ message: 'Manager not found' });
-    res.json(manager);
+    const reviews = await ManagerReview.find({ managerId: req.params.id })
+    .select('rating comment createdAt')
+    .sort({ createdAt: -1 })
+    .lean();
+    res.json({ ...manager, reviews });
   } catch (err) {
+    console.error('Error fetching manager with reviews:', err);
     res.status(500).json({ error: 'Server error' });
   }
+
 };
 
 
