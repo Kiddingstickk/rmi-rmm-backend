@@ -47,14 +47,14 @@ export const getAllManagers = async (req, res) => {
 export const getManagerById = async (req, res) => {
   try {
     const manager = await Manager.findById(req.params.id)
-      .populate('department')
-      .populate({
-        path: 'reviews',
-        populate: {
-          path: 'userId',
-          select: 'name' // only get user name
-        }
-      });
+    .populate('company', 'name')
+    .populate('department', 'name')
+    .populate({
+      path: 'reviews',
+      select: 'rating comment createdAt' // Only show safe fields
+    });
+
+
 
     if (!manager) return res.status(404).json({ message: 'Manager not found' });
     res.json(manager);
