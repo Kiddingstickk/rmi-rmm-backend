@@ -54,16 +54,25 @@ export const getManagerById = async (req, res) => {
     .populate('company', 'name')
     .populate('department', 'name')
     .lean();
-
-
-
-
+    
     if (!manager) return res.status(404).json({ message: 'Manager not found' });
+
+    const normalizedManager = {
+      ...manager,
+      company: manager.company?.name
+        ? { _id: manager.company._id, name: manager.company.name }
+        : undefined,
+      department: manager.department?.name
+        ? { _id: manager.department._id, name: manager.department.name }
+        : undefined
+    };
+
+
     const reviews = await ManagerReview.find({ managerId: req.params.id })
     .select('rating reviewText leadership communication teamwork empathy fairness createdAt')
     .sort({ createdAt: -1 })
     .lean();
-    res.json({ manager, reviews });
+    res.json({ manager: normalizedManager, reviews });
   } catch (err) {
     console.error('Error fetching manager with reviews:', err);
     res.status(500).json({ error: 'Server error' });
