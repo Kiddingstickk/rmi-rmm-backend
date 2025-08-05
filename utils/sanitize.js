@@ -1,7 +1,5 @@
 import sanitizeHtml from 'sanitize-html';
-import { createRequire } from 'module';
-const require = createRequire(import.meta.url);
-const { cleanProfanity } = require('./profanity.cjs');
+import { cleanProfanity } from './profanity.js';
 
 export const sanitizeText = (text) => {
   if (!text || typeof text !== 'string') return '';
