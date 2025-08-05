@@ -1,10 +1,9 @@
 import sanitizeHtml from 'sanitize-html';
-import { cleanProfanity } from './profanity.js';
 
 export const sanitizeText = (text) => {
   if (!text || typeof text !== 'string') return '';
 
-  const cleanHtml = sanitizeHtml(text, {
+  return sanitizeHtml(text, {
     allowedTags: [],
     allowedAttributes: {},
     disallowedTagsMode: 'discard',
@@ -13,6 +12,4 @@ export const sanitizeText = (text) => {
     },
     textFilter: (input) => input.trim(),
   });
-
-  return cleanProfanity(cleanHtml);
 };
