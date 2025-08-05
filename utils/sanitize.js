@@ -1,12 +1,13 @@
 import sanitizeHtml from 'sanitize-html';
-import Filter from 'bad-words';
+import { createRequire } from 'module';
+const require = createRequire(import.meta.url);
+const Filter = require('bad-words');
 
 const filter = new Filter();
 
 export const sanitizeText = (text) => {
   if (!text || typeof text !== 'string') return '';
 
-  // Step 1: Strip HTML
   const cleanHtml = sanitizeHtml(text, {
     allowedTags: [],
     allowedAttributes: {},
@@ -17,8 +18,6 @@ export const sanitizeText = (text) => {
     textFilter: (input) => input.trim(),
   });
 
-  // Step 2: Filter profanity
   const cleanText = filter.clean(cleanHtml);
-
   return cleanText;
 };
