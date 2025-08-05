@@ -1,7 +1,7 @@
 import sanitizeHtml from 'sanitize-html';
 import { createRequire } from 'module';
 const require = createRequire(import.meta.url);
-const Filter = require('bad-words');
+const Filter = require('./badWordsShim.cjs');
 
 const filter = new Filter();
 
