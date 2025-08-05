@@ -1,9 +1,7 @@
 import sanitizeHtml from 'sanitize-html';
 import { createRequire } from 'module';
 const require = createRequire(import.meta.url);
-const Filter = require('./badWordsShim.cjs');
-
-const filter = new Filter();
+const { cleanProfanity } = require('./profanity.cjs');
 
 export const sanitizeText = (text) => {
   if (!text || typeof text !== 'string') return '';
@@ -18,6 +16,5 @@ export const sanitizeText = (text) => {
     textFilter: (input) => input.trim(),
   });
 
-  const cleanText = filter.clean(cleanHtml);
-  return cleanText;
+  return cleanProfanity(cleanHtml);
 };
