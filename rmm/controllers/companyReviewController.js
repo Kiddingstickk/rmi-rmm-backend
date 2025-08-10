@@ -14,7 +14,7 @@ export const submitCompanyReview = async (req, res) => {
       company: companyId,
       reviewerId,
       ratings,
-      reviewText,
+      reviews,
       isAnonymous,
       reviewPeriod
     });
@@ -54,11 +54,11 @@ export const getCompanyReviews = async (req, res) => {
       if (reviews.length === 0) return res.json({ average: null });
   
       const totals = {
+        facilities: 0,
+        colleagues: 0,
+        environment: 0,
         workLifeBalance: 0,
-        compensation: 0,
-        culture: 0,
-        careerGrowth: 0,
-        diversity: 0
+        salary: 0
       };
   
       reviews.forEach(r => {
