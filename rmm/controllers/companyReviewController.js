@@ -4,7 +4,7 @@ import Company from '../models/Company.js';
 export const submitCompanyReview = async (req, res) => {
   try {
     const { companyId, ratings, reviewText, isAnonymous = true } = req.body;
-    const reviewerId = req.user._id;
+    const reviewerId = req.user.userId || req.user.id;
 
     const now = new Date();
     const reviewPeriod = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
