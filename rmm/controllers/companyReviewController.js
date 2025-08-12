@@ -6,12 +6,19 @@ import ManagerReview from '../models/ManagerReview.js';
 export const checkCompanyReviewEligibility = async (req, res) => {
   try {
     const { companyId } = req.params;
+    console.log('Received request to check eligibility for companyId:', companyId);
+
     const reviewerId = req.user.userId || req.user.id;
+    console.log('Decoded token payload:', req.user);
+    console.log('Extracted reviewerId:', reviewerId);
+
 
     const hasReviewedManager = await ManagerReview.exists({
       reviewerId,
       company: companyId
     });
+    console.log('Manager review exists:', hasReviewedManager);
+
 
     res.json({ eligible: !!hasReviewedManager });
   } catch (err) {
