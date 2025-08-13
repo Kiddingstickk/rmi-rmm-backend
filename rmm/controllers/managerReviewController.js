@@ -29,9 +29,22 @@ export const submitReview = async (req, res) => {
 
     
     const manager = await Manager.findById(managerId);
-    if (!manager || !manager.companyId) {
-      return res.status(400).json({ error: 'Manager or company not found' });
+    if (!manager) {
+      return res.status(404).json({ error: 'Manager not found' });
     }
+
+    
+    let resolvedCompanyId = manager.companyId;
+    if (!resolvedCompanyId && companyId) {
+      resolvedCompanyId = companyId;
+      manager.companyId = companyId; 
+      console.log(`📎 Patched manager ${managerId} with company ${companyId}`);
+    }
+
+    if (!resolvedCompanyId) {
+      return res.status(400).json({ error: 'Manager is not linked to a company' });
+    }
+
 
     const existingReview = await ManagerReview.findOne({ userId, managerId });
     if (existingReview) {
