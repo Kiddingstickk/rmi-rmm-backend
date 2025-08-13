@@ -16,9 +16,8 @@ export const checkCompanyReviewEligibility = async (req, res) => {
       return res.status(400).json({ error: 'Missing reviewerId or companyId' });
     }
 
-    const reviewerObjectId = mongoose.Types.ObjectId(reviewerId);
-    const companyObjectId = mongoose.Types.ObjectId(companyId);
-
+    const reviewerObjectId = new mongoose.Types.ObjectId(reviewerId);
+    const companyObjectId = new mongoose.Types.ObjectId(companyId);
 
 
     const hasReviewedManager = await ManagerReview.exists({
