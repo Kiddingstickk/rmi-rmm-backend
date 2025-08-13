@@ -26,15 +26,26 @@ export const submitReview = async (req, res) => {
       anonymous
     } = req.body;
 
+
+    
+    const manager = await Manager.findById(managerId);
+    if (!manager || !manager.companyId) {
+      return res.status(400).json({ error: 'Manager or company not found' });
+    }
+
     const existingReview = await ManagerReview.findOne({ userId, managerId });
     if (existingReview) {
       return res.status(400).json({ message: 'You have already reviewed this manager.' });
     }
     console.log('Authenticated user:', req.user);
+    console.log('🧑 Submitting review for manager:', managerId);
+    console.log('🏢 Manager belongs to company:', manager.companyId);
+
 
     const newReview = new ManagerReview({
       userId,
       managerId,
+      company: manager.companyId,
       rating,
       leadership,
       communication,
@@ -50,10 +61,6 @@ export const submitReview = async (req, res) => {
     
     await newReview.save();
     console.log('Reviewing manager with ID:', managerId);
-
-
-    const manager = await Manager.findById(managerId);
-    if (!manager) return res.status(404).json({ message: 'Manager not found' });
 
     manager.reviews.push(newReview._id);
 
