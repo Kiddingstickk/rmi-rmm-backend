@@ -23,7 +23,8 @@ export const submitReview = async (req, res) => {
       reviewLeadership,
       reviewCommunicationText,
       reviewSupport,
-      anonymous
+      anonymous,
+      companyId
     } = req.body;
 
 
