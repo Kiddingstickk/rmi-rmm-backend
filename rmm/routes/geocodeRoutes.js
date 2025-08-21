@@ -19,7 +19,7 @@ router.post('/', async (req, res) => {
         },
       }
     );
-
+    console.log("Geocode API response:", response.data);
     const result = response.data.results[0];
     if (!result) return res.status(404).json({ error: 'City not found' });
 
