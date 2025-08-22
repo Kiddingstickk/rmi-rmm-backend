@@ -38,7 +38,7 @@ router.post('/register', async (req, res) => {
       password,
       //otp,
       //otpExpiry,
-      isVerified: false, // Not verified yet
+      isVerified: true, // Not verified yet
     });
 
     // Save to PendingUser collection
@@ -83,16 +83,16 @@ router.post('/register', async (req, res) => {
     //}
 
     // OTP is valid, now create the user
-    //const newUser = new User({
-      //name: pendingUser.name,
-      //email: pendingUser.email,
-      //password: pendingUser.password, // Password already hashed
+    const newUser = new User({
+      name: pendingUser.name,
+      email: pendingUser.email,
+      password: pendingUser.password, // Password already hashed
       //isVerified: true,
       //skipHashing: true,
-    //});
+    });
 
     // Save the new user
-    //await newUser.save();
+    await newUser.save();
 
     //newUser.skipHashing = true;
 
@@ -100,9 +100,9 @@ router.post('/register', async (req, res) => {
     //await PendingUser.deleteOne({ email });
 
     // Optionally, you can send a success email
-    //const subject = 'Registration Successful';
-    //const text = 'Your account has been successfully verified. You can now log in.';
-    //await sendEmail(pendingUser.email, subject, text);
+    const subject = 'Registration Successful';
+    const text = 'Your account has been successfully verified. You can now log in.';
+    await sendEmail(pendingUser.email, subject, text);
 
     // Respond with success message and guide to SignIn
     //res.status(200).json({ message: 'OTP verified successfully. You can now log in.' });
