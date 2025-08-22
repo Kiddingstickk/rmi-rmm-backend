@@ -1,5 +1,5 @@
 import express from 'express';
-//import bcrypt from 'bcryptjs';
+import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
 import PendingUser from '../models/pendingUser.js';
