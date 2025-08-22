@@ -137,7 +137,7 @@ router.post('/login', async (req, res) => {
   try {
     const user = await User.findOne({ email });
     console.log('User found:', user);
-    if (!user) return res.status(400).json({ message: 'Invalid email or password' });
+    if (!user) return res.status(400).json({ message: 'Invalid email ' });
 
     //if (!user.isVerified) {
       //return res.status(403).json({ message: 'Please verify your email before logging in' });
@@ -146,7 +146,7 @@ router.post('/login', async (req, res) => {
 
     //const isMatch = await bcrypt.compare(password, user.password);
     console.log('Password match:', isMatch);
-    if (!isMatch) return res.status(400).json({ message: 'Invalid email or password' });
+    if (!isMatch) return res.status(400).json({ message: 'Invalid password' });
 
     const token = jwt.sign({ userId: user._id, name: user.name }, process.env.JWT_SECRET, {
       expiresIn: '7d',
