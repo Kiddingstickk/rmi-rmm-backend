@@ -1,7 +1,7 @@
 import PendingHost from '../models/PendingHost.js';
 import Host from '../models/Host.js';
 import Company from '../models/Company.js';
-import sendEmail from '../utils/sendEmail.js';
+import sendEmail from '../../utils/sendEmail.js';
 import bcrypt from 'bcryptjs';
 
 
