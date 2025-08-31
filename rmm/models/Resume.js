@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-const Resume = new mongoose.Schema({
+const resumeSchema = new mongoose.Schema({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
@@ -183,5 +183,6 @@ const Resume = new mongoose.Schema({
     interests: { type: [String], default: [] }
   }
 });
+const Resume = mongoose.models.Resume || mongoose.model('Resume', resumeSchema);
 
 export default Resume;
