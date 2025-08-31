@@ -25,6 +25,7 @@ import sitemapRoute from './rmm/routes/sitemap.js';
 import companyReviewRoutes from './rmm/routes/companyReviewsRoutes.js'
 import geocodeRoutes from './rmm/routes/geocodeRoutes.js';
 import resumeRoutes from './rmm/routes/resumeRoutes.js';
+import hostRoutes from './rmm/routes/hostRoutes.js' ;
 
 
 
@@ -84,6 +85,7 @@ app.use('/', sitemapRoute);
 app.use('/api/company-reviews', companyReviewRoutes);
 app.use('/api/geocode', geocodeRoutes);
 app.use('/api/resume',resumeRoutes);
+app.use('/api/host', hostRoutes);
 
 
 
