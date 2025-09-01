@@ -76,9 +76,9 @@ export const hostLogin = async (req, res) => {
   const isMatch = await bcrypt.compare(password, host.passwordHash);
   if (!isMatch) return res.status(401).json({ message: 'Invalid credentials' });
 
-  const otp = generateOtp(); // 6-digit code
+  const otp = generateOTP(); 
   host.otp = otp;
-  host.otpExpires = Date.now() + 5 * 60 * 1000; // 5 min expiry
+  host.otpExpires = Date.now() + 5 * 60 * 1000; 
   await host.save();
 
   await sendOtpToEmail(email, otp);
