@@ -81,9 +81,13 @@ export const hostLogin = async (req, res) => {
   host.otpExpires = Date.now() + 5 * 60 * 1000; 
   await host.save();
 
-  await sendOtpToEmail(email, otp);
-
-  res.json({ message: 'OTP sent to email', hostId: host._id });
+  await sendEmail(
+    email,
+    'Your OTP for Host Login',
+    `Hello,\n\nYour OTP for logging in as a company host is: ${otp}\nIt will expire in 10 minutes.\n\nIf you did not request this, please ignore this email.\n\n— Rate My Management`
+  );
+  
+  res.json({ message: 'OTP sent. Verify to complete login.', hostId: host._id });
 };
 
 export const verifyHostOtp = async (req, res) => {
