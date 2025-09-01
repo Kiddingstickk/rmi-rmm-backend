@@ -65,3 +65,45 @@ export const verifyHostRegistration = async (req, res) => {
   res.status(500).json({ message: 'Verification failed. Please try again later.' });
 }
 };
+
+
+export const hostLogin = async (req, res) => {
+  const { email, password } = req.body;
+
+  const host = await Host.findOne({ email });
+  if (!host) return res.status(404).json({ message: 'Host not found' });
+
+  const isMatch = await bcrypt.compare(password, host.passwordHash);
+  if (!isMatch) return res.status(401).json({ message: 'Invalid credentials' });
+
+  const otp = generateOtp(); // 6-digit code
+  host.otp = otp;
+  host.otpExpires = Date.now() + 5 * 60 * 1000; // 5 min expiry
+  await host.save();
+
+  await sendOtpToEmail(email, otp);
+
+  res.json({ message: 'OTP sent to email', hostId: host._id });
+};
+
+export const verifyHostOtp = async (req, res) => {
+  const { hostId, otp } = req.body;
+
+  const host = await Host.findById(hostId);
+  if (!host || host.otp !== otp || Date.now() > host.otpExpires) {
+    return res.status(401).json({ message: 'Invalid or expired OTP' });
+  }
+
+  host.lastLogin = new Date();
+  host.otp = null;
+  host.otpExpires = null;
+  await host.save();
+
+  const token = jwt.sign({ hostId: host._id }, process.env.JWT_SECRET, {
+    expiresIn: '7d',
+  });
+
+  res.json({ message: 'Login successful', token });
+};
+
+
