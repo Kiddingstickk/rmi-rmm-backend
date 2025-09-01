@@ -4,6 +4,7 @@ import Company from '../models/Company.js';
 import sendEmail from '../../utils/sendEmail.js';
 import bcrypt from 'bcryptjs';
 
+const generateOTP = () => Math.floor(100000 + Math.random() * 900000).toString();
 
 export const registerHost = async (req, res) => {
   const { email, password, companyName } = req.body;
@@ -28,11 +29,15 @@ export const registerHost = async (req, res) => {
 
 export const verifyHostRegistration = async (req, res) => {
   const { email, otp } = req.body;
-  const pendingHost = await PendingHost.findOne({ email });
+  try {
+    const pendingHost = await PendingHost.findOne({ email });
+    if (!pendingHost) {
+      return res.status(400).json({ message: 'No pending registration found for this email.' });
+    }
 
-  if (!pendingHost || pendingHost.otp !== otp || Date.now() > pendingHost.otpExpiry)
-    return res.status(400).json({ message: 'Invalid or expired OTP' });
-
+    if (pendingHost.otp !== otp || Date.now() > pendingHost.otpExpiry) {
+      return res.status(400).json({ message: 'Invalid or expired OTP. Please try again.' });
+    }
   // Create company if needed
   let company = await Company.findOne({ name: pendingHost.companyName });
   if (!company) {
@@ -48,6 +53,15 @@ export const verifyHostRegistration = async (req, res) => {
 
   await host.save();
   await PendingHost.deleteOne({ email });
+  await sendEmail(
+    host.email,
+    'Registration Successful',
+    `Your host account has been successfully verified and linked to ${company.name}. You can now log in and manage your company dashboard.`
+  );
 
-  res.json({ message: 'Host verified and registered', host });
+  res.status(200).json({ message: 'Host verified and registered successfully.', host });
+} catch (error) {
+  console.error('Error verifying host OTP:', error);
+  res.status(500).json({ message: 'Verification failed. Please try again later.' });
+}
 };
