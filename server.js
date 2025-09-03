@@ -26,6 +26,7 @@ import companyReviewRoutes from './rmm/routes/companyReviewsRoutes.js'
 import geocodeRoutes from './rmm/routes/geocodeRoutes.js';
 import resumeRoutes from './rmm/routes/resumeRoutes.js';
 import hostRoutes from './rmm/routes/hostRoutes.js' ;
+import stateRoutes from './rmm/routes/stateRoutes.js';
 
 
 
@@ -86,7 +87,7 @@ app.use('/api/company-reviews', companyReviewRoutes);
 app.use('/api/geocode', geocodeRoutes);
 app.use('/api/resume',resumeRoutes);
 app.use('/api/host', hostRoutes);
-
+app.use('/api/state', stateRoutes);
 
 
 
