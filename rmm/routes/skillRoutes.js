@@ -1,5 +1,5 @@
 import express from 'express';
-import { createSkill, getAllSkills } from '../controllers/skillController';
+import { createSkill, getAllSkills } from '../controllers/skillController.js';
 const router = express.Router();
 
 router.post('/', createSkill);
