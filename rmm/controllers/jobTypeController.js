@@ -1,5 +1,5 @@
 // controllers/jobTypeController.ts
-import JobType from '../models/JobType';
+import JobType from '../models/JobType.js';
 
 export const createJobType = async (req, res) => {
   const { name } = req.body;

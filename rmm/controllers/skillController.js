@@ -1,5 +1,5 @@
 // controllers/skillController.ts
-import Skill from '../models/Skill';
+import Skill from '../models/Skill.js';
 
 export const createSkill = async (req, res) => {
   const { name } = req.body;

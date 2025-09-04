@@ -1,5 +1,5 @@
 // controllers/experienceLevelController.ts
-import ExperienceLevel from '../models/ExperienceLevel';
+import ExperienceLevel from '../models/ExperienceLevel.js';
 
 export const createExperienceLevel = async (req, res) => {
   const { name } = req.body;
