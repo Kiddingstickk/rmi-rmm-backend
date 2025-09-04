@@ -16,11 +16,11 @@ const jobPostingSchema = new mongoose.Schema({
     max: Number,
     currency: { type: String, default: 'INR' }
   },
-  experienceLevel: {
+  experienceLevelId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'ExperienceLevel',
     required: true
-  },
+  },  
   postedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'Host', required: true },
   isActive: { type: Boolean, default: true }
 }, { timestamps: true });
