@@ -32,7 +32,7 @@ import skillRoutes from './rmm/routes/skillRoutes.js';
 import experienceLevelRoutes from './rmm/routes/experienceLevelRoutes.js';
 import jobTypeRoutes from './rmm/routes/jobTypeRoutes.js';
 import jobApplicationRoutes from './rmm/routes/jobApplicationRoutes.js';
-
+import statusRoutes from './rmm/routes/statusRoute.js'
 
 
 
@@ -96,6 +96,7 @@ app.use('/api/skills', skillRoutes);
 app.use('/api/experience-levels', experienceLevelRoutes);
 app.use('/api/job-types', jobTypeRoutes);
 app.use('/api/job-application', jobApplicationRoutes);
+app.use('/api', statusRoutes);
 
 
 
