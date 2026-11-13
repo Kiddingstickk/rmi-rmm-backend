@@ -49,6 +49,7 @@ const PORT = process.env.PORT || 5000;
 // CORS configuration
 const allowedOrigins = [
   'https://ratemymanagement.com',
+  'http://localhost:5173',
    
 ];
 const corsOptions = {
