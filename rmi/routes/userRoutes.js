@@ -37,31 +37,44 @@ router.get('/my-reviews', auth , async (req, res) => {
 // --- FIX: NOW, OUTSIDE ---
 
 // GET /api/user/profile
+// GET /api/user/profile
 router.get('/profile', auth, async (req, res) => {
   try {
-    const user = req.user;
-    const userId = user._id || user.userId;
+    // Fetch the actual user from MongoDB
+    const user = await User.findById(req.user.id).select('-password');
 
-    // Count number of reviews
-    const interviewers = await Interviewer.find({ 'ratings.userId': userId });
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    const userId = user._id;
+
+    // Count reviews submitted by this user
+    const interviewers = await Interviewer.find({
+      'ratings.userId': userId
+    });
+
     const totalReviews = interviewers.reduce((count, interviewer) => {
-      return count + interviewer.ratings.filter(r => r.userId.toString() === userId.toString()).length;
+      return count + interviewer.ratings.filter(
+        r => r.userId?.toString() === userId.toString()
+      ).length;
     }, 0);
 
-    // Calculate tokens (say 10 tokens per review for example)
+    // Existing token calculation
     const tokens = totalReviews * 10;
 
-    res.json({
+    return res.json({
       id: user._id,
       name: user.name,
       email: user.email,
-      createdAt: user.createdAt,  // Make sure your User model has this
+      createdAt: user.createdAt,
       totalReviews,
       tokens
     });
+
   } catch (error) {
     console.error('Error fetching user profile:', error);
-    res.status(500).json({ message: 'Server error' });
+    return res.status(500).json({ message: 'Server error' });
   }
 });
 
