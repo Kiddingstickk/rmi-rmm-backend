@@ -1,6 +1,7 @@
 import express from 'express';
 import auth from '../../shared/middleware/auth.js';
 import Interviewer from '../models/interviewer.js';
+import ManagerReview from '../../rmm/models/ManagerReview.js';
 import User from '../models/user.js';
 
 
@@ -36,31 +37,23 @@ router.get('/my-reviews', auth , async (req, res) => {
 
 // --- FIX: NOW, OUTSIDE ---
 
-// GET /api/user/profile
+
 // GET /api/user/profile
 router.get('/profile', auth, async (req, res) => {
   try {
-    // Fetch the actual user from MongoDB
+    // Fetch the authenticated user
     const user = await User.findById(req.user.id).select('-password');
 
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
 
-    const userId = user._id;
-
-    // Count reviews submitted by this user
-    const interviewers = await Interviewer.find({
-      'ratings.userId': userId
+    // Count actual manager reviews submitted by this user
+    const totalReviews = await ManagerReview.countDocuments({
+      userId: user._id
     });
 
-    const totalReviews = interviewers.reduce((count, interviewer) => {
-      return count + interviewer.ratings.filter(
-        r => r.userId?.toString() === userId.toString()
-      ).length;
-    }, 0);
-
-    // Existing token calculation
+    // Existing token calculation: 10 tokens per review
     const tokens = totalReviews * 10;
 
     return res.json({
@@ -77,6 +70,7 @@ router.get('/profile', auth, async (req, res) => {
     return res.status(500).json({ message: 'Server error' });
   }
 });
+
 
 
 router.post('/toggle-save/:interviewerId', auth , async (req, res) => {
